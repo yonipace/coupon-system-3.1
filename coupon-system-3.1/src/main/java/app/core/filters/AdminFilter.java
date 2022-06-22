@@ -15,14 +15,12 @@ import org.springframework.http.HttpStatus;
 import app.core.login.LoginManagerInterface.ClientType;
 import app.core.utilities.JwtUtil;
 
-public class ClientFilter implements Filter {
+public class AdminFilter implements Filter {
 
 	private JwtUtil jwtUtil;
-	private ClientType client;
 
-	public ClientFilter(JwtUtil jwtUtil, ClientType client) {
+	public AdminFilter(JwtUtil jwtUtil) {
 		this.jwtUtil = jwtUtil;
-		this.client = client;
 	}
 
 	@Override
@@ -35,15 +33,15 @@ public class ClientFilter implements Filter {
 
 		try {
 
-			if (jwtUtil.extractClientType(token).equals(this.client)) {
+			if (jwtUtil.extractClientType(token).equals(ClientType.ADMIN)) {
 				chain.doFilter(request, response);
+			} else {
+				// if not logged in - block the request
+				response.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not logged in");
 			}
-			// if not logged in - block the request
-			response.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not logged in");
 
-		} catch (
+		} catch (Exception e) {
 
-		Exception e) {
 			response.sendError(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
 
 		}
