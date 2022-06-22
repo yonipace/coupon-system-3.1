@@ -1,4 +1,4 @@
-# Coupon Management System (v 3.1)
+# Coupon Management System (part 3.1)
 
 part 3.1 of Coupon management sytem project (final course project at John Bryce college)
 
